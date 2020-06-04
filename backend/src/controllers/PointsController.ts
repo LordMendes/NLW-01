@@ -75,10 +75,13 @@ class PointsControllers{
             point_id
         };
     });
-
+    try{
     await trx('point_items').insert(pointItems);
     await trx.commit();
-
+    }catch{
+      await trx.rollback();
+      return response.status(400).json({message:'Invalid Item insertion!'})
+    }
     return response.json({
       id: point_id, 
       ...point});
